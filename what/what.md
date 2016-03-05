@@ -38,141 +38,60 @@ info 有篇yeoman的介绍文章：[《Yeoman：构建漂亮Web应用的工具�
 
 **用yeoman！1 行命名，15秒进入coding状态！**
 
-想尝试下吗？往下看~
-
 ## yeoman的简单使用
 
 ### 安装yeoman
 
-    需要用到
-    [npm](http://www.infoq.com/cn/articles/nodejs-npm-install-config)
-    ，安装 yo、grunt-cli、bower
+    npm install -g yo
+ 
+安装成功后，运行命令 yo ：
+   
+![./1.png](./1.png)   
 
-  <pre class="prettyprint undefined">npm install -g yo grunt-cli bower</pre>
+会出现问询列表，您曾安装过的 generator （yoeman 的概念，工程构建器） 会出现在这个列表，比如 run then xx generator (x.x.x)。
 
-安装成功后，会看到下面的提示：
+可以选择安装一个全新的 generator，“Install a generator”，我们安装一个 react 工程构建器，[generator-react-webpack](https://github.com/newtriks/generator-react-webpack)。
 
-    ![](http://img1.tuicool.com/BjyIBnJ.png!web)
+国内网速不理想，可以手动安装 generator ：
 
-    留意yo的二个模块：generator-mocha和generator-webapp，
-    **generator-**
-    前缀的模块表明它是一种工程模版，比如你的web工程是基于
-    [bootstrap](http://www.bootcss.com/)
-    框架，那么可以安装
-    [generator-bootstrap](https://github.com/yeoman/generator-bootstrap)
-    ，使用yo来自动生成该目录（会带上bootstrap的源码）。
+    npm install -g generator-react-webpack
 
-  <pre class="prettyprint undefined">npm install -g generator-bootstrap</pre>
+generator 安装成功后，会向 yo 注册子命令：yo react-webpack，命名名就是模块名（去掉 generator- 前缀）。
+  
 
 ### 生成工程目录
 
-创建（或打开）你的工程根目录，比如demo-app，然后运行命令：
+创建（或打开）你的工程根目录，比如 react-demo ，然后运行命令：
 
-  <pre class="prettyprint undefined">yo webapp</pre>
+    yo react-demo
+    
+yeoman 的 generator 带有问询模块（后面一章将编写 generator 时，会说明如何创建问询）。
 
-    webapp是yo自带的工程模版带有：
-    [html5 Boilerplate](http://html5boilerplate.com/)
-    、jquery、
-    [Modernizr](http://modernizr.com/)
-    、
-    [Bootstrap](http://www.bootcss.com/)
-    、
-    [RequireJS](http://requirejs.org/)
-    等框架。
+![./2.png](./2.png)
 
-    ![](http://img1.tuicool.com/b2Qriq.png!web)
-
-yeoman有个非常人性化的功能，带有问答功能，比如上图中，yeoman询问你，你的工程需要Bootstrap(sass)框架吗？
-
-需要输入“n”，因为需要sass运行环境（ruby）window下麻烦，先不引入。
-
-yeoman还会询问你，你的工程需要RequireJS模块加载框架吗？
-
-我们继续输入“Y”，OK，工程生成完毕，可以看下目录情况。
-
-    ![](http://img1.tuicool.com/ZJbmA3.png!web)
-
-    ![](http://img2.tuicool.com/Rbeuu2.png!web)
+按照问询输入或选择后，yoeman 就会创建 react 工程的初始目录结构。
 
 一切如此简单，你不需要再手动创建工程目录，也不需要再费事的google搜索下需要的框架，然后再下载，解压到工程目录。
 
-使用一行命令，然后就立马进入coding状态！这就是yeoman提高前端工作的地方。
+使用一行命令，然后就立马进入coding状态！这就是yeoman提高前端工作的地方，而且可以保证团队得其他同学的工程规范性。
 
-还没完，yeoman如果只能帮你创建工程目录，还不足以给我们惊喜。
+生成完成后，generator-react-webpack 还会自动安装依赖模块，相当于调用了 npm install 。
 
-如果我的工程中需要sass/less/coffscript编译呢？
+![./3.png](./3.png)
 
-我的工程中有ajax请求，需要放在apache的目录下？
+工程调试、编译等工作，generator-react-webpack 都已经预制写好配置，详细请看 generator-react-webpack 的文档，这部分就不属于 yoeman 的工作了。
 
-我写了单元测试，如何回归？
 
-…..
-
-这些问题，在yeoman中都不是问题，因为已经集成在内了。
-
-### 起个Node服务器
-
-yeoman内置了Node服务器服务，而且会监听工程目录下的文件的改变，一旦文件发生改变会重新编译文件（sass/less/coffscript）。
-
-    下面轮到
-    **grunt**
-    上场，在工程目录下，运行命令：
-
-  <pre class="prettyprint undefined">grunt server</pre>
-
-    ![](http://img2.tuicool.com/UFbQRb.png!web)
-
-    启动成功后会自动打开本地浏览器，默认地址为
-    **http://localhost:9000/**
-    ，9000端口号，可能被占用，这时候打开gruntfile.js文件（grunt的任务配置文件），找到：
-
-  <pre class="prettyprint css"><span class="tag">options</span>: <span class="rules">{
-                <span class="rule"><span class="attribute">port</span>:<span class="value"> <span class="number">9000</span>,
-                // change this to <span class="string">'0.0.0.0'</span> to access the server from outside
-                hostname: <span class="string">'localhost'</span>
-            }</span></span></span></pre>
-
-    修改下
-    **port**
-    ，即可。
-
-### 回归测试用例
-
-    Yeoman默认使用
-    [mocha](http://visionmedia.github.io/mocha/)
-    作为测试框架，是在 PhantomJS环境下进行回归测试。
-
-运行如下命令：
-
-  <pre class="prettyprint undefined">grunt test</pre>
-
-    ![](http://img1.tuicool.com/e2ANvu.png!web)
-
-启动成功，并回归成功，你可以在test目录下找到测试代码：
-
-    ![](http://img2.tuicool.com/BnMbIb.png!web)
-
-### 工程中引入其他类库
-
-    比如，我想要在工程中引入
-    [underscore](http://underscorejs.org/)
-
-  <pre class="prettyprint undefined">bower install underscore  
-grunt</pre>
-
-bower上场了，使用bower从在线包管理器中拉取underscore代码
 
 ## Yeoman特性总结
 
-偷下懒，抄下其他人的翻译：
-
 * 快速创建骨架应用程序——使用可自定义的模板（例如：HTML5、Boilerplate、Twitter Bootstrap等）、AMD（通过RequireJS）以及其他工具轻松地创建新项目的骨架。
-*   自动编译CoffeeScrip和Compass——在做出变更的时候，Yeoman的LiveReload监视进程会自动编译源文件，并刷新浏览器，而不需要你手动执行。
-*   自动完善你的脚本——所有脚本都会自动针对jshint（软件开发中的静态代码分析工具，用于检查JavaScript源代码是否符合编码规范）运行，从而确保它们遵循语言的最佳实践。
-*   内建的预览服务器——你不需要启动自己的HTTP服务器。内建的服务器用一条命令就可以启动
-*   非常棒的图像优化——Yeoman使用OptPNG和JPEGTran对所有图像做了优化，从而你的用户可以花费更少时间下载资源，有更多时间来使用你的应用程序。
-*   生成AppCache清单——Yeoman会为你生成应用程序缓存的清单，你只需要构建项目就好
-*   杀手级”的构建过程——你所做的工作不仅被精简到最少，让你更加专注，而且Yeoman还会优化所有图像文件和HTML文件、编译你的CoffeeScript和Compass文件、生成应用程序的缓存清单，如果你使用AMD，那么它还会通过r.js来传递这些模块。这会为你节省大量工作
-*   集成的包管理——Yeoman让你可以通过命令行（例如，yeoman搜索查询）轻松地查找新的包，安装并保持更新，而不需要你打开浏览器
-*   对ES6模块语法的支持——你可以使用最新的ECMAScript 6模块语法来编写模块。这还是一种实验性的特性，它会被转换成eS5，从而你可以在所有流行的浏览器中使用编写的代码
-*   PhantomJS单元测试——你可以通过PhantomJS轻松地运行单元测试。当你创建新的应用程序的时候，它还会为你自动创建测试内容的骨架
+* 自动编译 CoffeeScrip 和 Compass ——在做出变更的时候，Yeoman的LiveReload监视进程会自动编译源文件，并刷新浏览器，而不需要你手动执行。
+* 自动完善你的脚本——所有脚本都会自动针对jshint（软件开发中的静态代码分析工具，用于检查JavaScript源代码是否符合编码规范）运行，从而确保它们遵循语言的最佳实践。
+* 内建的预览服务器——你不需要启动自己的HTTP服务器。内建的服务器用一条命令就可以启动
+* 非常棒的图像优化——Yeoman使用OptPNG和JPEGTran对所有图像做了优化，从而你的用户可以花费更少时间下载资源，有更多时间来使用你的应用程序。
+* 生成AppCache清单——Yeoman会为你生成应用程序缓存的清单，你只需要构建项目就好
+* “杀手级”的构建过程——你所做的工作不仅被精简到最少，让你更加专注，而且Yeoman还会优化所有图像文件和HTML文件、编译你的CoffeeScript和Compass文件、生成应用程序的缓存清单，如果你使用AMD，那么它还会通过r.js来传递这些模块。这会为你节省大量工作
+* 集成的包管理——Yeoman让你可以通过命令行（例如，yeoman搜索查询）轻松地查找新的包，安装并保持更新，而不需要你打开浏览器
+* 对ES6模块语法的支持——你可以使用最新的ECMAScript 6模块语法来编写模块。这还是一种实验性的特性，它会被转换成eS5，从而你可以在所有流行的浏览器中使用编写的代码
+* PhantomJS 单元测试——你可以通过PhantomJS轻松地运行单元测试。当你创建新的应用程序的时候，它还会为你自动创建测试内容的骨架
